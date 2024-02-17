@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Model implements AuthenticatableContract
 {
@@ -20,4 +21,11 @@ class User extends Model implements AuthenticatableContract
     {
         return $this->hasMany(Post::class);
     }
+
+    public function social_user(): hasMany
+    {
+        return $this->hasMany(SocialUser::class);
+    }
+
+    
 }
