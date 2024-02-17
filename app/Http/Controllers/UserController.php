@@ -29,8 +29,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // validation
+        $request->validate([
+                'username' => 'required|string',
+                'email' => 'required|unique:users|email'
+        ]);
         // storing user
-        return "Store a newly created resource in storage.";
+        User::create([
+            'name' => $request->username,
+            'email' => $request->email
+        ]);
+
+        return redirect()->route('users.index');
     }
 
     /**
@@ -39,8 +49,9 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::find($id);
-
-        return view("users.show" , [ "user" => ($user ? $user : '') ]);
+        $posts = $user->posts;
+        
+        return view("users.show" , [ "user" => ($user ? $user : ''), "posts" => $posts ]);
     }
 
     /**
@@ -48,8 +59,10 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
+        
         $user = User::find($id);
         return view("users.edit" , [ "user" => ($user ? $user : '') ]);
+
 
     }
 
@@ -58,7 +71,18 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        return "Update an Object";
+        // validation
+        $request->validate([
+            'username' => 'required|string',
+            'email' => 'required|email'
+        ]);
+
+        User::find($id)->update([
+            'name' => $request->username,
+            'email' => $request->email
+
+        ]);
+        return redirect()->route('users.index');
     }
 
     /**
@@ -66,6 +90,7 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        return "Delete an Object";
+        User::destroy($id);
+        return redirect()->route('users.index');
     }
 }
